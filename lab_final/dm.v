@@ -14,7 +14,7 @@ module dm(
 
 reg [7:0] dmem[6:0];
 
-always @(addr or din)
+always @(din)
     if(DMWr == 1'b1)
         case(DMType)
             `dm_byte: dmem[addr] <= din[7:0];
