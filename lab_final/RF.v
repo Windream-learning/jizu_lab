@@ -33,7 +33,7 @@ module RF(
     reg [31:0] rf[31:0];
     integer i;
     
-    always @(posedge clk, negedge rstn)
+    always @(A1 or A2 or WD)
         if (!rstn)
             for(i = 0; i < 32; i = i+1)
                 rf[i] <= i;

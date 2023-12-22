@@ -13,7 +13,7 @@ module alu(
     output reg [7:0]Zero
     );
 
-    always @(posedge clk, negedge rstn) begin
+    always @(A or B) begin
         if(!rstn) C = 32'h00000000;
         else begin
             case(ALUOp)
