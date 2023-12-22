@@ -8,6 +8,8 @@ module SCPU_TOP(
 
     reg [31:0]clkdiv;
     wire Clk_CPU;
+    wire Clk_display;
+    
 
     // Clk_CPU初始化
     always @(posedge clk or negedge rstn) begin
@@ -15,7 +17,8 @@ module SCPU_TOP(
                 else clkdiv <= clkdiv + 1'b1;
     end
 
-    assign Clk_CPU = (sw_i[15]) ? clkdiv[27] : clkdiv[25];
+    assign Clk_display = (sw_i[15]) ? clkdiv[27] : clkdiv[25];
+    assign Clk_CPU = (sw_i[1]) ? 1'b0 : Clk_display;
 
 
     // rom显示模块
@@ -50,7 +53,7 @@ module SCPU_TOP(
     reg [2:0]alu_addr;
     reg [31:0]alu_disp_data;
 
-    always @(posedge Clk_CPU or negedge rstn)
+    always @(posedge Clk_display or negedge rstn)
         if(!rstn) alu_addr = 3'b000;
         else if(sw_i[12] == 1'b1) begin
             alu_addr = alu_addr + 1'b1;
@@ -70,7 +73,7 @@ module SCPU_TOP(
     parameter DM_DATA_NUM = 16;
     reg [5:0]dmem_addr;
 
-    always @(posedge Clk_CPU or negedge rstn)
+    always @(posedge Clk_display or negedge rstn)
         if(!rstn) dmem_addr = 6'd0;
         else if(sw_i[11] == 1'b1) begin
             dmem_addr = dmem_addr + 1'b1;
@@ -94,7 +97,7 @@ module SCPU_TOP(
                 default : display_data = instr;
             endcase
         end
-            else display_data = led_disp_data;
+            else display_data = instr;
     end
 
 
@@ -164,7 +167,7 @@ module SCPU_TOP(
         endcase
     end
 
-    
+    // 例化部分
     dist_mem_im U_IM(
         .a(rom_addr),
         .spo(instr)
