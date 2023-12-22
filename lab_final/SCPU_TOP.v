@@ -11,7 +11,7 @@ module SCPU_TOP(
     wire Clk_display;
     
 
-    // Clk_CPU初始�?
+    // Clk_CPU初始�?
     always @(posedge clk or negedge rstn) begin
             if(!rstn) clkdiv <= 0;
                 else clkdiv <= clkdiv + 1'b1;
@@ -70,23 +70,25 @@ module SCPU_TOP(
 
     // dm显示模块
     reg [31:0]dmem_data;
-    parameter DM_DATA_NUM = 16;
+    parameter DM_DATA_NUM = 7;
     reg [5:0]dmem_addr;
 
     always @(posedge Clk_display or negedge rstn)
         if(!rstn) dmem_addr = 6'd0;
         else if(sw_i[11] == 1'b1) begin
-            dmem_addr = dmem_addr + 1'b1;
-            dmem_data = U_DM.dmem[dmem_addr][7:0];
             if(dmem_addr == DM_DATA_NUM) begin
                 dmem_addr = 6'd0;
                 dmem_data = 32'hFFFFFFFF;
+            end
+            else begin
+                dmem_data = U_DM.dmem[dmem_addr][7:0];
+                dmem_addr = dmem_addr + 1'b1;
             end
         end
         else dmem_data = dmem_data;
 
 
-    // 传入�?发板的显示模�
+    // 传入�?发板的显示模�
     reg [31:0]display_data;
     
     always @(sw_i) begin
@@ -143,12 +145,12 @@ module SCPU_TOP(
     assign rs1 = inst_in[19:15];  // rs1
     assign rs2 = inst_in[24:20];  // rs2
     assign rd = inst_in[11:7];  // rd
-    // assign iimm_shamt = inst_in[24:20]; // slli指令立即�?
-    assign iimm = inst_in[31:20]; // addi 指令立即数，lw指令立即�?
-    assign simm = {inst_in[31:25], inst_in[11:7]}; // sw指令立即�?
-    // assign bimm = {inst_in[31], inst_in[7], inst_in[30:25], inst_in[11:8]}; // beq指令立即�?
-    // assign uimm = inst_in[31:12]; // lui指令立即�?
-    // assign jimm = {inst_in[31], inst_in[19:12], inst_in[20], inst_in[30:21]}; // jal指令立即�?
+    // assign iimm_shamt = inst_in[24:20]; // slli指令立即�?
+    assign iimm = inst_in[31:20]; // addi 指令立即数，lw指令立即�?
+    assign simm = {inst_in[31:25], inst_in[11:7]}; // sw指令立即�?
+    // assign bimm = {inst_in[31], inst_in[7], inst_in[30:25], inst_in[11:8]}; // beq指令立即�?
+    // assign uimm = inst_in[31:12]; // lui指令立即�?
+    // assign jimm = {inst_in[31], inst_in[19:12], inst_in[20], inst_in[30:21]}; // jal指令立即�?
     
 
     // alu mux
