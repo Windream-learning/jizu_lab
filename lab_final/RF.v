@@ -36,7 +36,7 @@ module RF(
             rf[i] <= i;
     end
     
-    always @(A1 or A2 or WD)
+    always @(WD)
         if(RFWr && (!sw_i[1])) begin
             if(A3 != 5'b00000) rf[A3] <= WD;
             $display("r[%2d] = 0x%8X,", A3, WD);
