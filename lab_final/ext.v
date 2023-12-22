@@ -6,7 +6,6 @@
 // `define EXT_CTRL_JTYPE 3'b
 
 module EXT( 
-    input clk,
     input [4:0] iimm_shamt,
     input [11:0]	iimm, //instr[31:20], 12 bits
     input [11:0]	simm, //instr[31:25, 11:7], 12 bits

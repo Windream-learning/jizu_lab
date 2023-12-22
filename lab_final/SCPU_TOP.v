@@ -38,7 +38,7 @@ module SCPU_TOP(
     reg [31:0]reg_data;
     reg [4:0]reg_addr;
     
-    always @(posedge Clk_CPU or negedge rstn) begin
+    always @(posedge Clk_display or negedge rstn) begin
         if(!rstn) reg_addr = 5'b00000;
         else if(sw_i[13] == 1'b1) begin
                 if(reg_addr == 5'b11111) reg_addr = 5'b00000;
@@ -176,7 +176,6 @@ module SCPU_TOP(
     );
     
     RF U_RF(
-        .clk(Clk_CPU),
         .rstn(rstn),
         .RFWr(RegWrite),
         .sw_i(sw_i),
@@ -189,7 +188,6 @@ module SCPU_TOP(
     );
     
     alu U_alu(
-        .clk(Clk_CPU),
         .rstn(rstn),
         .A(RD1),
         .B(B),
@@ -199,7 +197,6 @@ module SCPU_TOP(
     );
 
     dm U_DM(
-        .clk(Clk_CPU),
         .DMWr(MemWrite),
         .addr(aluout[5:0]),
         .din(RD2),
@@ -208,7 +205,6 @@ module SCPU_TOP(
     );
 
     EXT U_EXT(
-        .clk(Clk_CPU),
         // .iimm_shamt(iimm_shamt),
         .iimm(iimm),
         .simm(simm),

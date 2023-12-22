@@ -5,7 +5,6 @@
 `define dm_byte_unsigned 3'b100
 
 module dm(
-    input clk,
     input DMWr,
     input [5:0]addr,
     input [31:0]din,

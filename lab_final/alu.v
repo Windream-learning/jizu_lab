@@ -5,7 +5,6 @@
 
 
 module alu(
-    input clk,
     input rstn,
     input signed[31:0] A, B,
     input [4:0]ALUOp,

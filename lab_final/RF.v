@@ -21,7 +21,6 @@
 
 
 module RF(
-    input clk,
     input rstn,
     input RFWr,
     input [15:0]sw_i,
