@@ -176,7 +176,6 @@ module SCPU_TOP(
     );
     
     RF U_RF(
-        .rstn(rstn),
         .RFWr(RegWrite),
         .sw_i(sw_i),
         .A1(rs1),
@@ -188,7 +187,6 @@ module SCPU_TOP(
     );
     
     alu U_alu(
-        .rstn(rstn),
         .A(RD1),
         .B(B),
         .ALUOp(ALUOp),

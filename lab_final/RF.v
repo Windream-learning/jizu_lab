@@ -21,7 +21,6 @@
 
 
 module RF(
-    input rstn,
     input RFWr,
     input [15:0]sw_i,
     input [4:0]A1, A2, A3,
