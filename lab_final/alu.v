@@ -10,10 +10,12 @@ module alu(
     output reg signed[31:0] C,
     output reg [7:0]Zero
     );
+    
+    initial begin
+        C = 32'h00000000;
+    end
 
     always @(A or B) begin
-        if(!rstn) C = 32'h00000000;
-        else begin
             case(ALUOp)
                 `ALUOp_nop: C = C;
                 `ALUOp_add: C = A + B;
@@ -21,7 +23,6 @@ module alu(
                 `ALUOp_lui: C = A + B;
             endcase
             Zero = (C==0) ? 1 : 0;
-        end
     end
         
 endmodule
