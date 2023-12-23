@@ -1,4 +1,4 @@
-// `define EXT_CTRL_ITYPE_SHAMT 3'b
+`define EXT_CTRL_ITYPE_SHAMT 3'b011
 `define EXT_CTRL_ITYPE 3'b010
 `define EXT_CTRL_STYPE 3'b001
 `define EXT_CTRL_BTYPE 3'b100
@@ -18,7 +18,7 @@ module EXT(
 
 always @(EXTOp or iimm or simm or bimm)
     case (EXTOp)
-        //`EXT_CTRL_ITYPE_SHAMT:   immout<={27'b0,iimm_shamt[4:0]};
+        `EXT_CTRL_ITYPE_SHAMT:   immout<={27'b0,iimm_shamt[4:0]};
         `EXT_CTRL_ITYPE:	if (iimm[11]>0) immout<={20'b11111111111111111111,iimm[11:0]};
                                 else immout<={20'b0,iimm[11:0]};
         `EXT_CTRL_STYPE:	if (simm[11]>0) immout<={20'b11111111111111111111,simm[11:0]};

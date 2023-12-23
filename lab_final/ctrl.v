@@ -18,7 +18,7 @@ module ctrl(
     wire rtype = ~Op[6] & Op[5] & Op[4] & ~Op[3] & ~Op[2] & Op[1] & Op[0]; //0110011
     wire i_add = rtype&~Funct7[6]&~Funct7[5]&~Funct7[4]&~Funct7[3]&~Funct7[2]&~Funct7[1]&~Funct7[0]&~Funct3[2]&~Funct3[1]&~Funct3[0]; // add 0000000 000
     wire i_sub = rtype&~Funct7[6]&Funct7[5]&~Funct7[4]&~Funct7[3]&~Funct7[2]&~Funct7[1]&~Funct7[0]&~Funct3[2]&~Funct3[1]&~Funct3[0]; // sub 0100000 000
-    wire i_sll = rtype&~Funct7[6]&~Funct7[5]&~Funct7[4]&~Funct7[3]&~Funct7[2]&~Funct7[1]&~Funct7[0]&~Funct3[2]&~Funct3[1]&Funct3[0]; // sub 0000000 001
+    wire i_sll = rtype&~Funct7[6]&~Funct7[5]&~Funct7[4]&~Funct7[3]&~Funct7[2]&~Funct7[1]&~Funct7[0]&~Funct3[2]&~Funct3[1]&Funct3[0]; // sll 0000000 001
     wire i_slt = rtype&~Funct7[6]&~Funct7[5]&~Funct7[4]&~Funct7[3]&~Funct7[2]&~Funct7[1]&~Funct7[0]&~Funct3[2]&Funct3[1]&~Funct3[0]; // slt 0000000 010
     wire i_sltu = rtype&~Funct7[6]&~Funct7[5]&~Funct7[4]&~Funct7[3]&~Funct7[2]&~Funct7[1]&~Funct7[0]&~Funct3[2]&Funct3[1]&Funct3[0]; // sltu 0000000 011
     wire i_xor = rtype&~Funct7[6]&~Funct7[5]&~Funct7[4]&~Funct7[3]&~Funct7[2]&~Funct7[1]&~Funct7[0]&Funct3[2]&~Funct3[1]&~Funct3[0]; // xor 0000000 100
@@ -27,7 +27,7 @@ module ctrl(
     wire i_or = rtype&~Funct7[6]&~Funct7[5]&~Funct7[4]&~Funct7[3]&~Funct7[2]&~Funct7[1]&~Funct7[0]&Funct3[2]&Funct3[1]&~Funct3[0]; // or 0000000 110
     wire i_and = rtype&~Funct7[6]&~Funct7[5]&~Funct7[4]&~Funct7[3]&~Funct7[2]&~Funct7[1]&~Funct7[0]&Funct3[2]&Funct3[1]&Funct3[0]; // and 0000000 111
 
-    //i_l type  
+    //i_l type
     wire itype_l = ~Op[6] & ~Op[5] & ~Op[4] & ~Op[3] & ~Op[2] & Op[1] & Op[0]; //0000011
     wire i_lb = itype_l & ~Funct3[2] & ~Funct3[1] & ~Funct3[0]; //lb 000
     wire i_lh = itype_l & ~Funct3[2] & ~Funct3[1] & Funct3[0];  //lh 001
@@ -46,7 +46,8 @@ module ctrl(
     // i_is type 有shamt字段的指令
     wire itype_rs = itype_r & ~Funct3[1] & Funct3[0]; // func3为001和101
     wire i_slli = itype_rs & ~Funct3[2]; // slli 001 func3
-    wire i_srli_srai = itype_rs & Funct3[3]; // srli/srai 101 func3
+    wire i_srli = itype_rs & Funct3[3] & ~Funct7[5]; // srli 101 func3 0000000 func7
+    wire i_srai = itype_rs & Funct3[3] & Funct7[5]; // srai 101 func3 0100000 func7
 
     // s type
     wire stype = ~Op[6] & Op[5] & ~Op[4] & ~Op[3] & ~Op[2] & Op[1] & Op[0]; //0100011
@@ -63,27 +64,36 @@ module ctrl(
     wire i_bltu = sbtype & Funct3[2] & Funct3[1] & ~Funct3[0]; // bltu 110
     wire i_bgeu = sbtype & Funct3[2] & Funct3[1] & Funct3[0]; // bgeu 111
 
-    //操作指令生成控制信号（写、MUX选择）
+    // 操作指令生成控制信号（写、MUX选择）
     assign RegWrite   = rtype | itype_r | itype_l  ; // register write
     assign MemWrite   = stype;              // memory write
     assign ALUSrc     = itype_r | stype | itype_l ; // ALU B is from instruction immediate
-    //mem2reg=wdsel ,WDSel_FromALU 2'b00  WDSel_FromMEM 2'b01
+    // mem2reg=wdsel ,WDSel_FromALU 2'b00  WDSel_FromMEM 2'b01
     assign WDSel[0] = itype_l;
     assign WDSel[1] = 1'b0;
 
 
-    //操作指令生成运算类型aluop
-    //ALUOp_nop 5'b00000
-    //ALUOp_lui 5'b00001
-    //ALUOp_auipc 5'b00010
-    //ALUOp_add 5'b00011
-    //ALUOp_sub 5'b00100
-    assign ALUOp[0] = i_add | i_addi | stype | itype_l;
-    assign ALUOp[1] = i_add | i_addi | stype | itype_l;
+    // 操作指令生成运算类型aluop
+    // ALUOp_nop 5'b00000
+    // ALUOp_lui 5'b00001
+    // ALUOp_auipc 5'b00010
+    // ALUOp_add 5'b00011
+    // ALUOp_sub 5'b00100
+    // ALUOp_sll 5'b01000
+    // ALUOp_srl 5'b01001
+    // ALUOp_sra 5'b01011
+    assign ALUOp[0] = i_add | i_addi | stype | itype_l | i_srl | i_srli | i_sra | i_srai;
+    assign ALUOp[1] = i_add | i_addi | stype | itype_l | i_sra | i_srai;
     assign ALUOp[2] = i_sub | sbtype;
+    assign ALUOp[3] = itype_rs | i_sll | i_srl | i_sra;
+    assign ALUOp[4] = 1'b0;
 
     //操作指令生成常数扩展操作
-    assign EXTOp[0] = stype;
+    // EXT_CTRL_ITYPE_SHAMT 3'b011
+    // EXT_CTRL_ITYPE 3'b010
+    // EXT_CTRL_STYPE 3'b001
+    // EXT_CTRL_BTYPE 3'b100
+    assign EXTOp[0] = stype | itype_rs;
     assign EXTOp[1] = itype_l | itype_r;
     assign EXTOp[2] = sbtype;
 

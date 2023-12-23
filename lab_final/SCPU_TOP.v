@@ -133,7 +133,7 @@ module SCPU_TOP(
     wire [31:0]aluout;
     wire Zero;
     wire [31:0]dout;
-    // wire [4:0]iimm_shamt;
+    wire [4:0]iimm_shamt;
     wire [11:0]iimm;
     wire [11:0]simm;
     wire [11:0]bimm;
@@ -152,7 +152,7 @@ module SCPU_TOP(
     assign rs1 = inst_in[19:15];  // rs1
     assign rs2 = inst_in[24:20];  // rs2
     assign rd = inst_in[11:7];  // rd
-    // assign iimm_shamt = inst_in[24:20]; // slli指令立即�?
+    assign iimm_shamt = inst_in[24:20]; // slli指令立即�?
     assign iimm = inst_in[31:20]; // addi 指令立即数，lw指令立即�?
     assign simm = {inst_in[31:25], inst_in[11:7]}; // sw指令立即�?
     assign bimm = {inst_in[31], inst_in[7], inst_in[30:25], inst_in[11:8]}; // beq指令立即�?
@@ -213,7 +213,7 @@ module SCPU_TOP(
     );
 
     EXT U_EXT(
-        // .iimm_shamt(iimm_shamt),
+        .iimm_shamt(iimm_shamt),
         .iimm(iimm),
         .simm(simm),
         .bimm(bimm),

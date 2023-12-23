@@ -3,7 +3,9 @@
 `define ALUOp_auipc 5'b00010
 `define ALUOp_add 5'b00011
 `define ALUOp_sub 5'b00100
-
+`define ALUOp_sll 5'b01000
+`define ALUOp_srl 5'b01001
+`define ALUOp_sra 5'b01011
 
 module alu(
     input signed[31:0] A, B,
@@ -23,6 +25,9 @@ module alu(
                 `ALUOp_auipc: C = B;
                 `ALUOp_lui: C = B;
                 `ALUOp_sub: C = A - B;
+                `ALUOp_sll: C = A << B;
+                `ALUOp_srl: C = A >> B;
+                `ALUOp_sra: C = A >>> B;
             endcase
             Zero = (C==0) ? 1 : 0;
     end
