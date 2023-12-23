@@ -17,11 +17,8 @@ module SCPU_TOP(
                 else clkdiv <= clkdiv + 1'b1;
     end
 
-    //assign Clk_display = (sw_i[15]) ? clkdiv[27] : clkdiv[25];
-    //assign Clk_CPU = (sw_i[1]) ? 1'b0 : Clk_display;
-    assign Clk_CPU = clk;
-    assign Clk_display = clk;
-
+    assign Clk_display = (sw_i[15]) ? clkdiv[27] : clkdiv[25];
+    assign Clk_CPU = (sw_i[1]) ? 1'b0 : Clk_display;
 
     // rom显示模块
     wire [31:0]instr;
@@ -171,7 +168,7 @@ module SCPU_TOP(
 `define WDSel_FromALU 2'b00
 `define WDSel_FromMEM 2'b01
 
-    always @(dout)
+    always @(*)
     begin
         case(WDSel)
             `WDSel_FromALU: WD<=aluout;
@@ -187,6 +184,7 @@ module SCPU_TOP(
     );
     
     RF U_RF(
+        .clk(Clk_CPU),
         .RFWr(RegWrite),
         .sw_i(sw_i),
         .A1(rs1),

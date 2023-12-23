@@ -14,14 +14,14 @@ assign sw_i[14] = 1'b1;
 assign sw_i[15] = 1'b0;
 
 initial begin
-    rstn = 1;
-    clk = 0;
+    rstn = 0;
+    #40 clk = 0;
 
-    #30 rstn = 0;
+    #30 rstn = 1;
     #500 $stop;
 end
 
 always
-    #20 clk = ~clk;
+    #100 clk = ~clk;
 
 endmodule

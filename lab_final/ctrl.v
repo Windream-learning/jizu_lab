@@ -13,7 +13,7 @@ module ctrl(
     output [1:0]WDSel    // (register) write data selection  (MemtoReg)
     );
 
-    //操作码（op funct7 funct3）确定具体操作指令类型 
+    //操作码（op funct7 funct3）确定具体操作指令类�? 
     //R_type:
     wire rtype = ~Op[6] & Op[5] & Op[4] & ~Op[3] & ~Op[2] & Op[1] & Op[0]; //0110011
     wire i_add = rtype&~Funct7[6]&~Funct7[5]&~Funct7[4]&~Funct7[3]&~Funct7[2]&~Funct7[1]&~Funct7[0]&~Funct3[2]&~Funct3[1]&~Funct3[0]; // add 0000000 000
@@ -43,11 +43,11 @@ module ctrl(
     wire i_xori = itype_r & Funct3[2] & ~Funct3[1] & ~Funct3[0]; // xori 100 func3
     wire i_ori = itype_r & Funct3[2] & Funct3[1] & ~Funct3[0]; // ori 110 func3
     wire i_andi = itype_r & Funct3[2] & Funct3[1] & Funct3[0]; // andi 111 func3
-    // i_is type 有shamt字段的指令
-    wire itype_rs = itype_r & ~Funct3[1] & Funct3[0]; // func3为001和101
+    // i_is type 有shamt字段的指�?
+    wire itype_rs = itype_r & ~Funct3[1] & Funct3[0]; // func3�?001�?101
     wire i_slli = itype_rs & ~Funct3[2]; // slli 001 func3
-    wire i_srli = itype_rs & Funct3[3] & ~Funct7[5]; // srli 101 func3 0000000 func7
-    wire i_srai = itype_rs & Funct3[3] & Funct7[5]; // srai 101 func3 0100000 func7
+    wire i_srli = itype_rs & Funct3[2] & ~Funct7[5]; // srli 101 func3 0000000 func7
+    wire i_srai = itype_rs & Funct3[2] & Funct7[5]; // srai 101 func3 0100000 func7
 
     // s type
     wire stype = ~Op[6] & Op[5] & ~Op[4] & ~Op[3] & ~Op[2] & Op[1] & Op[0]; //0100011
@@ -64,7 +64,7 @@ module ctrl(
     wire i_bltu = sbtype & Funct3[2] & Funct3[1] & ~Funct3[0]; // bltu 110
     wire i_bgeu = sbtype & Funct3[2] & Funct3[1] & Funct3[0]; // bgeu 111
 
-    // 操作指令生成控制信号（写、MUX选择）
+    // 操作指令生成控制信号（写、MUX选择�?
     assign RegWrite   = rtype | itype_r | itype_l  ; // register write
     assign MemWrite   = stype;              // memory write
     assign ALUSrc     = itype_r | stype | itype_l ; // ALU B is from instruction immediate
@@ -80,13 +80,13 @@ module ctrl(
     // ALUOp_add 5'b00011
     // ALUOp_sub 5'b00100
     // ALUOp_sll 5'b01000
-    // ALUOp_srl 5'b01001
-    // ALUOp_sra 5'b01011
-    assign ALUOp[0] = i_add | i_addi | stype | itype_l | i_srl | i_srli | i_sra | i_srai;
-    assign ALUOp[1] = i_add | i_addi | stype | itype_l | i_sra | i_srai;
-    assign ALUOp[2] = i_sub | sbtype;
+    // ALUOp_srl 5'b01100
+    // ALUOp_sra 5'b11000
+    assign ALUOp[0] = i_add | i_addi | stype | itype_l;
+    assign ALUOp[1] = i_add | i_addi | stype | itype_l;
+    assign ALUOp[2] = i_sub | sbtype | i_srl | i_srli;
     assign ALUOp[3] = itype_rs | i_sll | i_srl | i_sra;
-    assign ALUOp[4] = 1'b0;
+    assign ALUOp[4] = i_sra | i_srai;
 
     //操作指令生成常数扩展操作
     // EXT_CTRL_ITYPE_SHAMT 3'b011

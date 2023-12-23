@@ -1,12 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 2023/11/18 17:46:23
-// Design Name: 
-// Module Name: RF
-// Project Name: 
 // Target Devices: 
 // Tool Versions: 
 // Description: 
@@ -16,11 +8,20 @@
 // Revision:
 // Revision 0.01 - File Created
 // Additional Comments:
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 2023/11/18 17:46:23
+// Design Name: 
+// Module Name: RF
+// Project Name: 
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
 
 module RF(
+    input clk,
     input RFWr,
     input [15:0]sw_i,
     input [4:0]A1, A2, A3,
@@ -36,7 +37,7 @@ module RF(
             rf[i] <= i;
     end
     
-    always @(WD)
+    always @(negedge clk)
         if(RFWr && (!sw_i[1])) begin
             if(A3 != 5'b00000) rf[A3] <= WD;
             $display("r[%2d] = 0x%8X,", A3, WD);

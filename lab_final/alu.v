@@ -4,8 +4,8 @@
 `define ALUOp_add 5'b00011
 `define ALUOp_sub 5'b00100
 `define ALUOp_sll 5'b01000
-`define ALUOp_srl 5'b01001
-`define ALUOp_sra 5'b01011
+`define ALUOp_srl 5'b01100
+`define ALUOp_sra 5'b11000
 
 module alu(
     input signed[31:0] A, B,
@@ -18,7 +18,7 @@ module alu(
         C = 32'h00000000;
     end
 
-    always @(A or B) begin
+    always @(*) begin
             case(ALUOp)
                 `ALUOp_nop: C = C;
                 `ALUOp_add: C = A + B;
