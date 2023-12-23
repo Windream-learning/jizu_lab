@@ -16,7 +16,7 @@ module EXT(
     output reg [31:0] immout
     );
 
-always @(EXTOp or iimm or simm)
+always @(EXTOp or iimm or simm or bimm)
     case (EXTOp)
         //`EXT_CTRL_ITYPE_SHAMT:   immout<={27'b0,iimm_shamt[4:0]};
         `EXT_CTRL_ITYPE:	if (iimm[11]>0) immout<={20'b11111111111111111111,iimm[11:0]};
