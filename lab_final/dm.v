@@ -15,7 +15,7 @@ module dm(
 
 reg [7:0] dmem[6:0];
 
-always @(negedge clk)
+always @(negedge clk) begin
     if(DMWr == 1'b1)
         case(DMType)
             `dm_byte: dmem[addr] <= din[7:0];
@@ -30,13 +30,14 @@ always @(negedge clk)
                 dmem[addr+3] <= din[31:24];
             end
         endcase
-    else
-        case(DMType)
-            `dm_byte: dout = {{24{dmem[addr][7]}}, dmem[addr][7:0]};
-            `dm_byte_unsigned: dout = {{24{1'b0}}, dmem[addr][7:0]};
-            `dm_halfword: dout = {{16{dmem[addr+1][7]}}, dmem[addr+1][7:0], dmem[addr][7:0]};
-            `dm_halfword_unsigned: dout = {{16{1'b0}}, dmem[addr+1][7:0], dmem[addr][7:0]};
-            `dm_word: dout = {dmem[addr+3][7:0], dmem[addr+2][7:0], dmem[addr+1][7:0], dmem[addr][7:0]};
-        endcase
+
+    case(DMType)
+        `dm_byte: dout = {{24{dmem[addr][7]}}, dmem[addr][7:0]};
+        `dm_byte_unsigned: dout = {{24{1'b0}}, dmem[addr][7:0]};
+        `dm_halfword: dout = {{16{dmem[addr+1][7]}}, dmem[addr+1][7:0], dmem[addr][7:0]};
+        `dm_halfword_unsigned: dout = {{16{1'b0}}, dmem[addr+1][7:0], dmem[addr][7:0]};
+        `dm_word: dout = {dmem[addr+3][7:0], dmem[addr+2][7:0], dmem[addr+1][7:0], dmem[addr][7:0]};
+    endcase
+end
 
 endmodule

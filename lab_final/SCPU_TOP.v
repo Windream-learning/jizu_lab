@@ -169,7 +169,7 @@ module SCPU_TOP(
 `define WDSel_FromALU 2'b00
 `define WDSel_FromMEM 2'b01
 
-    always @*
+    always @(dout)
     begin
         case(WDSel)
             `WDSel_FromALU: WD<=aluout;
