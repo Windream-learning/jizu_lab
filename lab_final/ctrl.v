@@ -55,7 +55,7 @@ module ctrl(
     wire i_sh = stype & ~Funct3[2] & ~Funct3[1] & Funct3[0]; // sh 001
 
     // sb type
-    wire sbtype = Op[6] & Op[5] & ~Op[4] & ~Op[3] & Op[2] & Op[1] & Op[0]; //1100111
+    wire sbtype = Op[6] & Op[5] & ~Op[4] & ~Op[3] & ~Op[2] & Op[1] & Op[0]; //1100011
     wire i_beq = sbtype & ~Funct3[2] & ~Funct3[1] & ~Funct3[0]; // beq 000
     wire i_bne = sbtype & ~Funct3[2] & ~Funct3[1] & Funct3[0]; // bne 001
     wire i_blt = sbtype & Funct3[2] & ~Funct3[1] & ~Funct3[0]; // blt 100
