@@ -2,12 +2,12 @@ module ctrl(
     input [6:0]Op,  //opcode
     input [6:0]Funct7,  //funct7 
     input [2:0]Funct3,    // funct3 
-    //input Zero,
+    input Zero,
     output RegWrite, // control signal for register write
     output MemWrite, // control signal for memory write
     output [2:0]EXTOp,    // control signal to signed extension
     output [4:0]ALUOp,    // ALU opertion
-    //output [2:0] NPCOp,    // next pc operation
+    output [2:0]NPCOp,    // next pc operation
     output ALUSrc,   // ALU source for b
     output [2:0]DMType, //dm r/w type
     output [1:0]WDSel    // (register) write data selection  (MemtoReg)
@@ -84,8 +84,8 @@ module ctrl(
 
     //操作指令生成常数扩展操作
     assign EXTOp[0] = stype;
-    assign EXTOp[1] = itype_l | itype_r; 
-    assign EXTOp[2] = 1'b0;
+    assign EXTOp[1] = itype_l | itype_r;
+    assign EXTOp[2] = sbtype;
 
     //根据具体S和i_L指令生成DataMem数据操作类型编码
     //dm_word 3'b000
@@ -96,5 +96,13 @@ module ctrl(
     assign DMType[2] = i_lbu;
     assign DMType[1] = i_lb | i_sb | i_lhu;
     assign DMType[0] = i_lh | i_sh | i_lb | i_sb;
+
+
+    //根据Zero产生NPCOp
+    //NPCOp_normol 3'b000
+    //NPCOp_beq 3'b001
+    assign NPCOp[0] = Zero;
+    assign NPCOp[1] = 1'b0;
+    assign NPCOp[2] = 1'b0;
 
 endmodule

@@ -24,12 +24,19 @@ module SCPU_TOP(
     // rom显示模块
     wire [31:0]instr;
 
+`define NPCOp_normol 3'b000
+`define NPCOp_beq 3'b001
+
     reg [5:0]rom_addr;
     always @(posedge Clk_CPU or negedge rstn) begin
         if(!rstn) rom_addr = 6'b000000;
         else if(sw_i[14] == 1'b1)
             if (rom_addr == 6'b111111) rom_addr = 6'b000000;
-            else rom_addr = rom_addr + 1'b1;
+            else 
+                case(NPCOp)
+                    `NPCOp_normol: rom_addr = rom_addr + 1'b1;
+                    `NPCOp_beq: rom_addr = rom_addr + (immout >> 2);
+                endcase
         else rom_addr = rom_addr;    
     end
     
@@ -220,10 +227,12 @@ module SCPU_TOP(
         .Op(Op),
         .Funct3(Funct3),
         .Funct7(Funct7),
+        .Zero(Zero),
         .RegWrite(RegWrite),
         .MemWrite(MemWrite),
         .EXTOp(EXTOp),
         .ALUOp(ALUOp),
+        .NPCOp(NPCOp),
         .ALUSrc(ALUSrc),
         .DMType(DMType),
         .WDSel(WDSel)

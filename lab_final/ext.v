@@ -1,7 +1,7 @@
 // `define EXT_CTRL_ITYPE_SHAMT 3'b
 `define EXT_CTRL_ITYPE 3'b010
 `define EXT_CTRL_STYPE 3'b001
-// `define EXT_CTRL_BTYPE 3'b
+`define EXT_CTRL_BTYPE 3'b100
 // `define EXT_CTRL_UTYPE 3'b
 // `define EXT_CTRL_JTYPE 3'b
 
@@ -23,8 +23,8 @@ always @(EXTOp or iimm or simm)
                                 else immout<={20'b0,iimm[11:0]};
         `EXT_CTRL_STYPE:	if (simm[11]>0) immout<={20'b11111111111111111111,simm[11:0]};
                                 else immout<={20'b0,simm[11:0]};
-        // `EXT_CTRL_BTYPE:    if (bimm[11]>0) immout<={19'b1111111111111111111,bimm[11:0],1'b0};
-        //                         else immout<={19'b0,bimm[11:0],1'b0};
+        `EXT_CTRL_BTYPE:    if (bimm[11]>0) immout<={19'b1111111111111111111,bimm[11:0],1'b0};
+                                 else immout<={19'b0,bimm[11:0],1'b0};
         // `EXT_CTRL_UTYPE:	immout <= {uimm[19:0], 12'b0};
 
         // `EXT_CTRL_JTYPE:	if (jimm[19]>0) immout<={11'b11111111111,jimm[19:0],1'b0};
