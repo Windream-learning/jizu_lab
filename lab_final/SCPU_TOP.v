@@ -17,8 +17,10 @@ module SCPU_TOP(
                 else clkdiv <= clkdiv + 1'b1;
     end
 
-    assign Clk_display = (sw_i[15]) ? clkdiv[27] : clkdiv[25];
-    assign Clk_CPU = (sw_i[1]) ? 1'b0 : Clk_display;
+    //assign Clk_display = (sw_i[15]) ? clkdiv[27] : clkdiv[25];
+    //assign Clk_CPU = (sw_i[1]) ? 1'b0 : Clk_display;
+    assign Clk_CPU = clk;
+    assign Clk_display = clk;
 
 
     // rom显示模块
