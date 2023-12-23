@@ -2,6 +2,7 @@
 `define ALUOp_lui 5'b00001
 `define ALUOp_auipc 5'b00010
 `define ALUOp_add 5'b00011
+`define ALUOp_sub 5'b00100
 
 
 module alu(
@@ -21,6 +22,7 @@ module alu(
                 `ALUOp_add: C = A + B;
                 `ALUOp_auipc: C = A + B;
                 `ALUOp_lui: C = A + B;
+                `ALUOp_sub: C = A - B;
             endcase
             Zero = (C==0) ? 1 : 0;
     end

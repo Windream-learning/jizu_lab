@@ -68,7 +68,7 @@ module ctrl(
     assign MemWrite   = stype;              // memory write
     assign ALUSrc     = itype_r | stype | itype_l ; // ALU B is from instruction immediate
     //mem2reg=wdsel ,WDSel_FromALU 2'b00  WDSel_FromMEM 2'b01
-    assign WDSel[0] = itype_l;   
+    assign WDSel[0] = itype_l;
     assign WDSel[1] = 1'b0;
 
 
@@ -77,8 +77,10 @@ module ctrl(
     //ALUOp_lui 5'b00001
     //ALUOp_auipc 5'b00010
     //ALUOp_add 5'b00011
-    assign ALUOp[0]= i_add | i_addi | stype | itype_l ;
-    assign ALUOp[1]= i_add | i_addi | stype | itype_l ;
+    //ALUOp_sub 5'b00100
+    assign ALUOp[0] = i_add | i_addi | stype | itype_l;
+    assign ALUOp[1] = i_add | i_addi | stype | itype_l;
+    assign ALUOp[2] = i_sub | sbtype;
 
     //操作指令生成常数扩展操作
     assign EXTOp[0] = stype;
