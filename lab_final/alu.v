@@ -20,8 +20,8 @@ module alu(
             case(ALUOp)
                 `ALUOp_nop: C = C;
                 `ALUOp_add: C = A + B;
-                `ALUOp_auipc: C = A + B;
-                `ALUOp_lui: C = A + B;
+                `ALUOp_auipc: C = B;
+                `ALUOp_lui: C = B;
                 `ALUOp_sub: C = A - B;
             endcase
             Zero = (C==0) ? 1 : 0;
