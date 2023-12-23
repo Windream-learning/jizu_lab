@@ -5,6 +5,7 @@
 `define dm_byte_unsigned 3'b100
 
 module dm(
+    input clk,
     input DMWr,
     input [5:0]addr,
     input [31:0]din,
@@ -14,7 +15,7 @@ module dm(
 
 reg [7:0] dmem[6:0];
 
-always @(din)
+always @(negedge clk)
     if(DMWr == 1'b1)
         case(DMType)
             `dm_byte: dmem[addr] <= din[7:0];

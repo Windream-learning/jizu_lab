@@ -197,6 +197,7 @@ module SCPU_TOP(
     );
 
     dm U_DM(
+        .clk(Clk_CPU),
         .DMWr(MemWrite),
         .addr(aluout[5:0]),
         .din(RD2),
