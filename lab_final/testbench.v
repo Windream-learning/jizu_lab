@@ -9,11 +9,15 @@ wire [7:0]an;
 
 SCPU_TOP U_CPU(clk, rstn, sw_i, seg, an);
 
+assign sw_i[13:0] = 14'h0000;
+assign sw_i[14] = 1'b1;
+assign sw_i[15] = 1'b0;
+
 initial begin
     rstn = 1;
     clk = 0;
 
-    #30 rst = 0;
+    #30 rstn = 0;
     #500 $stop;
 end
 
