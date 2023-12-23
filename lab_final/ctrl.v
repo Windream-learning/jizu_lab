@@ -64,7 +64,7 @@ module ctrl(
     wire i_bgeu = sbtype & Funct3[2] & Funct3[1] & Funct3[0]; // bgeu 111
 
     //操作指令生成控制信号（写、MUX选择）
-    assign RegWrite   = rtype | itype_r|itype_l  ; // register write
+    assign RegWrite   = rtype | itype_r | itype_l  ; // register write
     assign MemWrite   = stype;              // memory write
     assign ALUSrc     = itype_r | stype | itype_l ; // ALU B is from instruction immediate
     //mem2reg=wdsel ,WDSel_FromALU 2'b00  WDSel_FromMEM 2'b01
@@ -85,7 +85,7 @@ module ctrl(
     assign EXTOp[1] = itype_l | itype_r; 
     assign EXTOp[2] = 1'b0;
 
-    //根据具体S和i_L指令生成DataMem数据操作类型编码   
+    //根据具体S和i_L指令生成DataMem数据操作类型编码
     //dm_word 3'b000
     //dm_halfword 3'b001
     //dm_halfword_unsigned 3'b010
