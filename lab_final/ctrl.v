@@ -101,7 +101,7 @@ module ctrl(
     //根据Zero产生NPCOp
     //NPCOp_normol 3'b000
     //NPCOp_beq 3'b001
-    assign NPCOp[0] = Zero;
+    assign NPCOp[0] = Zero & sbtype;
     assign NPCOp[1] = 1'b0;
     assign NPCOp[2] = 1'b0;
 

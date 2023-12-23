@@ -9,7 +9,7 @@ module SCPU_TOP(
     reg [31:0]clkdiv;
     wire Clk_CPU;
     wire Clk_display;
-    
+
 
     // Clk_CPU初始�?
     always @(posedge clk or negedge rstn) begin
