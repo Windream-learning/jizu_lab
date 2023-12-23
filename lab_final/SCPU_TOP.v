@@ -11,7 +11,7 @@ module SCPU_TOP(
     wire Clk_display;
 
 
-    // Clk_CPU初始�?
+    // Clk_CPU初始�??
     always @(posedge clk or negedge rstn) begin
             if(!rstn) clkdiv <= 0;
                 else clkdiv <= clkdiv + 1'b1;
@@ -23,6 +23,7 @@ module SCPU_TOP(
 
     // rom显示模块
     wire [31:0]instr;
+    wire [31:0]immout;
 
 `define NPCOp_normol 3'b000
 `define NPCOp_beq 3'b001
@@ -95,7 +96,7 @@ module SCPU_TOP(
         else dmem_data = dmem_data;
 
 
-    // 传入�?发板的显示模�
+    // 传入�??发板的显示模�?
     reg [31:0]display_data;
     
     always @(sw_i) begin
@@ -139,7 +140,6 @@ module SCPU_TOP(
     wire [11:0]bimm;
     // wire [19:0]uimm;
     // wire [19:0]jimm;
-    wire [31:0]immout;
 
     
     // 传入control部分
@@ -152,12 +152,12 @@ module SCPU_TOP(
     assign rs1 = inst_in[19:15];  // rs1
     assign rs2 = inst_in[24:20];  // rs2
     assign rd = inst_in[11:7];  // rd
-    assign iimm_shamt = inst_in[24:20]; // slli指令立即�?
-    assign iimm = inst_in[31:20]; // addi 指令立即数，lw指令立即�?
-    assign simm = {inst_in[31:25], inst_in[11:7]}; // sw指令立即�?
-    assign bimm = {inst_in[31], inst_in[7], inst_in[30:25], inst_in[11:8]}; // beq指令立即�?
-    // assign uimm = inst_in[31:12]; // lui指令立即�?
-    // assign jimm = {inst_in[31], inst_in[19:12], inst_in[20], inst_in[30:21]}; // jal指令立即�?
+    assign iimm_shamt = inst_in[24:20]; // slli指令立即�??
+    assign iimm = inst_in[31:20]; // addi 指令立即数，lw指令立即�??
+    assign simm = {inst_in[31:25], inst_in[11:7]}; // sw指令立即�??
+    assign bimm = {inst_in[31], inst_in[7], inst_in[30:25], inst_in[11:8]}; // beq指令立即�??
+    // assign uimm = inst_in[31:12]; // lui指令立即�??
+    // assign jimm = {inst_in[31], inst_in[19:12], inst_in[20], inst_in[30:21]}; // jal指令立即�??
     
 
     // alu mux
