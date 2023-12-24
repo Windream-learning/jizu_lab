@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 `define dm_word 3'b000
 `define dm_halfword 3'b001
 `define dm_halfword_unsigned 3'b010
@@ -25,7 +27,7 @@ initial begin
     dmem[6] = 8'h00;
 end
 
-always @(posedge clk) begin
+always @(negedge clk)
     if(DMWr == 1'b1)
         case(DMType)
             `dm_byte: dmem[addr] <= din[7:0];
@@ -40,14 +42,16 @@ always @(posedge clk) begin
                 dmem[addr+3] <= din[31:24];
             end
         endcase
-    else
-        case(DMType)
-            `dm_byte: dout = {{24{dmem[addr][7]}}, dmem[addr][7:0]};
-            `dm_byte_unsigned: dout = {{24{1'b0}}, dmem[addr][7:0]};
-            `dm_halfword: dout = {{16{dmem[addr+1][7]}}, dmem[addr+1][7:0], dmem[addr][7:0]};
-            `dm_halfword_unsigned: dout = {{16{1'b0}}, dmem[addr+1][7:0], dmem[addr][7:0]};
-            `dm_word: dout = {dmem[addr+3][7:0], dmem[addr+2][7:0], dmem[addr+1][7:0], dmem[addr][7:0]};
-        endcase
-end
+
+
+always @(posedge clk)
+    #500
+    case(DMType)
+        `dm_byte: dout = {{24{dmem[addr][7]}}, dmem[addr][7:0]};
+        `dm_byte_unsigned: dout = {{24{1'b0}}, dmem[addr][7:0]};
+        `dm_halfword: dout = {{16{dmem[addr+1][7]}}, dmem[addr+1][7:0], dmem[addr][7:0]};
+        `dm_halfword_unsigned: dout = {{16{1'b0}}, dmem[addr+1][7:0], dmem[addr][7:0]};
+        `dm_word: dout = {dmem[addr+3][7:0], dmem[addr+2][7:0], dmem[addr+1][7:0], dmem[addr][7:0]};
+    endcase
 
 endmodule
