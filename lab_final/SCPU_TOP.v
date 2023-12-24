@@ -173,7 +173,7 @@ module SCPU_TOP(
         case(WDSel)
             `WDSel_FromALU: WD<=aluout;
             `WDSel_FromMEM: WD<=dout;
-            //`WDSel_FromPC: WD<=PC_out+4;
+            //`WDSel_FromPC: WD<=(rom_addr << 2)+4;
         endcase
     end
 
